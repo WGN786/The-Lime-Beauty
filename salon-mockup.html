@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lime Beauty — Editable Website Template Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<style>
+  :root{
+    --black:#0b0b0d; --charcoal:#16161a; --charcoal2:#1f1f25;
+    --gold:#d4af37; --gold-soft:#e8c969; --gold-dim:rgba(212,175,55,.25);
+    --text:#f4f1e9; --text-dim:#b9b4a7; --border:rgba(212,175,55,.30);
+    --edit:#39d0d8; /* cyan edit accent */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Poppins',sans-serif;background:linear-gradient(160deg,var(--black),var(--charcoal));color:var(--text);line-height:1.6}
+  h1,h2,h3{font-family:'Playfair Display',serif;color:var(--gold)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  .gold-btn{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1500;font-weight:700;padding:14px 30px;border-radius:30px;letter-spacing:.5px;cursor:pointer;border:none;font-family:'Poppins'}
+  .gold-btn:hover{filter:brightness(1.08)}
+
+  /* ---------- EDITABLE OVERLAY SYSTEM ---------- */
+  .editable{position:relative;border:1.5px dashed rgba(57,208,216,.35);border-radius:14px}
+  .editable::before{
+    content:"[EDITABLE SECTION]";position:absolute;top:-11px;left:14px;
+    background:var(--edit);color:#04222a;font-size:10px;font-weight:700;
+    padding:2px 8px;border-radius:6px;letter-spacing:.5px;z-index:5;
+  }
+  .pencil{position:absolute;top:8px;right:10px;width:26px;height:26px;border-radius:50%;
+    background:rgba(57,208,216,.15);border:1px solid var(--edit);display:flex;align-items:center;
+    justify-content:center;font-size:13px;color:var(--edit);z-index:6;cursor:pointer}
+  .pencil:hover{background:var(--edit);color:#04222a}
+  .ph{color:var(--edit);font-style:italic;font-size:12px;opacity:.85}
+
+  /* ---------- IMAGE EDIT (logo + photos) ---------- */
+  [data-img]{outline:2px solid rgba(57,208,216,.7);outline-offset:2px;cursor:pointer}
+  .img-tools{position:fixed;z-index:1000;background:#04222a;border:1px solid var(--edit);border-radius:10px;padding:6px;display:none;gap:6px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  .img-tools button{font:600 12px 'Inter',sans-serif;padding:7px 12px;border:none;border-radius:7px;cursor:pointer;background:var(--edit);color:#04222a}
+  .img-tools button.del{background:#e25555;color:#fff}
+  #imgFile{display:none}
+
+  /* ---------- HEADER ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(11,11,13,.85);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display';font-weight:700;font-size:22px;color:var(--gold)}
+  .logo .dot{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-soft))}
+  .logo .logo-mark{flex:0 0 auto;filter:drop-shadow(0 2px 6px rgba(212,175,55,.35))}
+  .logo .logo-text em{font-style:normal;color:var(--gold-soft)}
+  .logo-emblem{display:block;max-width:200px;height:auto}
+  .menu{display:flex;gap:28px;font-size:14px}
+  .menu a:hover{color:var(--gold)}
+  .socials{display:flex;gap:12px}
+  .soc{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;color:#fff}
+  .wa{background:#25D366}.fb{background:#1877F2}.ig{background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)}.tt{background:#000;border:1px solid var(--gold)}
+
+  /* ---------- HERO ---------- */
+  .hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:70px 0}
+  .hero h1{font-size:46px;line-height:1.1;margin-bottom:14px}
+  .hero .tag{color:var(--text-dim);margin-bottom:24px}
+  .services-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+  .services-list li{display:flex;align-items:center;gap:10px;font-size:15px}
+  .services-list li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold)}
+  .hero-photos{position:relative;height:420px}
+  .circ{position:absolute;border-radius:50%;border:4px solid var(--charcoal);overflow:hidden;
+    display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:13px;text-align:center;padding:10px}
+  .circ img{width:100%;height:100%;object-fit:cover;display:block}
+  .c1{width:240px;height:240px;left:10px;top:20px;background:radial-gradient(circle at 30% 30%,#3a3a44,#15151a)}
+  .c2{width:200px;height:200px;right:0;top:0;background:radial-gradient(circle at 30% 30%,#4a3a2a,#1a140d)}
+  .c3{width:180px;height:180px;right:30px;bottom:0;background:radial-gradient(circle at 30% 30%,#2a3a4a,#0d141a)}
+
+  /* ---------- SECTION TITLES ---------- */
+  .sec{padding:60px 0}
+  .sec-title{text-align:center;margin-bottom:36px}
+  .sec-title h2{font-size:34px}
+  .sec-title p{color:var(--text-dim)}
+
+  /* ---------- TESTIMONIALS ---------- */
+  .carousel{display:flex;gap:20px;overflow-x:auto;padding-bottom:10px}
+  .tcard{min-width:300px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:16px;padding:24px}
+  .stars{color:var(--gold);margin-bottom:10px}
+  .tcard p{font-size:14px;color:var(--text-dim)}
+
+  /* ---------- PRODUCTS ---------- */
+  .product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .product{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:16px;padding:22px;text-align:center}
+  .bottle{height:160px;margin:0 auto 16px;width:70px;border-radius:10px 10px 14px 14px;
+    background:linear-gradient(180deg,var(--gold-soft),#7a5f17);position:relative;display:flex;align-items:flex-end;justify-content:center;color:#1a1500;font-size:11px;font-weight:700;padding-bottom:8px}
+  .bottle::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:22px;height:16px;background:#2a2a30;border-radius:4px}
+  .product h3{font-size:17px;font-family:'Poppins';font-weight:600}
+  .product .price{color:var(--gold-soft);font-weight:700;margin-top:6px}
+
+  /* ---------- STYLISTS ---------- */
+  .stylist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;text-align:center}
+  .portrait{width:150px;height:150px;border-radius:50%;margin:0 auto 14px;
+    background:radial-gradient(circle at 35% 30%,#4a4a54,#15151a);border:3px solid var(--gold);overflow:hidden;
+    display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px}
+  .portrait img{width:100%;height:100%;object-fit:cover;display:block}
+  .stylist h3{font-size:17px;font-family:'Poppins';font-weight:600}
+  .stylist span{color:var(--text-dim);font-size:13px}
+
+  /* ---------- BLOG ---------- */
+  .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .post{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .thumb{height:170px;background:linear-gradient(135deg,#2a2a34,#15151a);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px;overflow:hidden}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .post .body{padding:18px}
+  .post h3{font-size:16px;font-family:'Poppins';font-weight:600;color:var(--text)}
+  .post p{font-size:13px;color:var(--text-dim);margin-top:8px}
+
+  /* ---------- MAP ---------- */
+  .map{height:320px;border-radius:16px;background:
+    repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(212,175,55,.08) 39px),
+    repeating-linear-gradient(90deg,transparent,transparent 38px,rgba(212,175,55,.08) 39px),
+    #121217;
+    display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Playfair Display';font-size:20px}
+  .map{cursor:pointer;outline:2px solid rgba(57,208,216,.7);outline-offset:3px}
+  .map iframe{width:100%;height:100%;border:0;border-radius:16px;display:block}
+  .map-tools{position:fixed;z-index:1000;background:#04222a;border:1px solid var(--edit);border-radius:10px;padding:6px;display:none;gap:6px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  .map-tools button{font:600 12px 'Inter',sans-serif;padding:7px 12px;border:none;border-radius:7px;cursor:pointer;background:var(--edit);color:#04222a}
+  .map-tools button.del{background:#e25555;color:#fff}
+
+  /* ---------- CTA ---------- */
+  .cta{text-align:center;padding:70px 0;background:radial-gradient(circle at 50% 0%,var(--gold-dim),transparent 60%)}
+  .cta h2{font-size:38px;margin-bottom:16px}
+  .cta .phone{font-size:22px;color:var(--gold-soft);font-weight:700;margin:18px 0;display:block}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--charcoal2);border-top:1px solid var(--border);padding:46px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}
+  .foot-grid h3{font-size:18px;margin-bottom:12px}
+  .foot-grid p,.foot-grid a{font-size:13px;color:var(--text-dim);display:block;margin-bottom:6px}
+  .foot-bottom{text-align:center;margin-top:30px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:18px}
+  .foot-bottom strong{color:var(--gold)}
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr}.menu{display:none}
+    .product-grid,.stylist-grid,.blog-grid{grid-template-columns:repeat(2,1fr)}
+    .foot-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="wrap nav editable">
+    <span class="pencil">✎</span>
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 240 270" width="44" height="50" aria-hidden="true">
+        <path d="M120 20 C158 78,196 116,196 162 A76 76 0 1 1 44 162 C44 116,82 78,120 20 Z" fill="#d4af37"/>
+        <path d="M150 70 C168 72,184 92,185 120 C186 142,180 160,169 171 C161 179,143 183,126 183 C114 183,102 180,100 171 C107 168,114 168,111 160 C108 156,103 154,110 150 C104 146,101 142,108 138 C91 134,85 129,92 121 C98 116,107 118,113 114 C108 104,108 90,119 80 C127 73,140 71,150 70 Z" fill="#0c0c0c"/>
+        <g fill="none" stroke="#b8902f" stroke-width="7" stroke-linecap="round">
+          <path d="M186 105 C205 110,212 130,200 150 C194 160,200 172,210 175"/>
+          <path d="M182 120 C200 126,206 146,194 166"/>
+        </g>
+        <g fill="none" stroke="#f0d97a" stroke-width="3" stroke-linecap="round">
+          <path d="M186 105 C205 110,212 130,200 150 C194 160,200 172,210 175"/>
+          <path d="M182 120 C200 126,206 146,194 166"/>
+        </g>
+        <g stroke="#6e5712" stroke-width="1.5">
+          <path d="M196 44 C204 36,214 38,214 30 C206 28,196 34,196 44 Z" fill="#d4af37"/>
+          <path d="M210 50 C220 44,230 48,228 40 C218 38,208 44,210 50 Z" fill="#d4af37"/>
+        </g>
+      </svg>
+      <span class="logo-text">The Lime <em>Beauty</em></span>
+    </div>
+    <nav class="menu">
+      <a href="#">Home</a><a href="#">Services</a><a href="#">About Us</a><a href="#">Booking</a>
+    </nav>
+    <div class="socials">
+      <a class="soc wa" href="#" title="WhatsApp">WA</a>
+      <a class="soc fb" href="#" title="Facebook">f</a>
+      <a class="soc ig" href="#" title="Instagram">IG</a>
+      <a class="soc tt" href="#" title="TikTok">TT</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="wrap hero editable">
+  <span class="pencil">✎</span>
+  <div>
+    <h1>Be The Best<br>version of you</h1>
+    <p class="tag">Luxury international beauty &amp; hair salon — where you become the best version of you.</p>
+    <h2 style="font-size:20px">OUR SERVICES</h2>
+    <ul class="services-list">
+      <li>Hair Cut</li><li>Hair Styling</li>
+      <li>Hair Colour</li><li>Facial</li>
+      <li>Manicure</li><li>Pedicure</li>
+      <li>Threading</li><li>Waxing</li>
+    </ul>
+    <a class="gold-btn" href="#">BOOK YOUR APPOINTMENT</a>
+  </div>
+  <div class="hero-photos">
+    <div class="circ c1"><img src="https://loremflickr.com/600/600/hairwash,salon?lock=11" alt="Hair Wash"></div>
+    <div class="circ c2"><img src="https://loremflickr.com/600/600/manicure?lock=12" alt="Manicure"></div>
+    <div class="circ c3"><img src="https://loremflickr.com/600/600/facial,spa?lock=13" alt="Facial"></div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="wrap sec editable">
+  <span class="pencil">✎</span>
+  <div class="sec-title"><h2>Client Testimonials</h2><p>Real words from our valued clients.</p></div>
+  <div class="carousel">
+    <div class="tcard"><div class="stars">★★★★★</div><p>"Absolutely loved my hair colour, the stylists are world-class and the salon is stunning."</p><p class="ph">— Amber R.</p></div>
+    <div class="tcard"><div class="stars">★★★★★</div><p>"Best facial experience, so relaxing and professional. Results that actually last."</p><p class="ph">— Hannah K.</p></div>
+    <div class="tcard"><div class="stars">★★★★☆</div><p>"Manicure lasted weeks, will return for sure. The team really cares."</p><p class="ph">— Zara M.</p></div>
+    <div class="tcard"><div class="stars">★★★★★</div><p>"Elegant salon, gold-standard service from start to finish."</p><p class="ph">— Lena P.</p></div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS ============ -->
+<section class="wrap sec editable">
+  <span class="pencil">✎</span>
+  <div class="sec-title"><h2>Our Premium Products</h2><p>Salon-grade retail for your at-home routine.</p></div>
+  <div class="product-grid">
+    <div class="product"><div class="bottle">Argan</div><h3>Lime Argan Shampoo</h3><p class="ph">Nourishing daily cleanse</p><div class="price">Rs. 1800</div></div>
+    <div class="product"><div class="bottle">Gold</div><h3>Lime Gold Conditioner</h3><p class="ph">Silky repair &amp; shine</p><div class="price">Rs. 1600</div></div>
+    <div class="product"><div class="bottle">Hydra</div><h3>Hydra Boost Cream</h3><p class="ph">Deep moisture therapy</p><div class="price">Rs. 2500</div></div>
+    <div class="product"><div class="bottle">Serum</div><h3>Repair Serum</h3><p class="ph">Strength &amp; gloss</p><div class="price">Rs. 3000</div></div>
+  </div>
+</section>
+
+<!-- ============ STYLISTS ============ -->
+<section class="wrap sec editable">
+  <span class="pencil">✎</span>
+  <div class="sec-title"><h2>Meet Our Expert Stylists</h2><p>The talent behind your transformation.</p></div>
+  <div class="stylist-grid">
+    <div class="stylist"><div class="portrait"><img src="https://loremflickr.com/400/400/portrait,woman?lock=31" alt="Ayesha Khan"></div><h3>Ayesha Khan</h3><span>Master Colourist &middot; 15%</span></div>
+    <div class="stylist"><div class="portrait"><img src="https://loremflickr.com/400/400/portrait,woman?lock=32" alt="Sara Malik"></div><h3>Sara Malik</h3><span>Stylist &middot; 12%</span></div>
+    <div class="stylist"><div class="portrait"><img src="https://loremflickr.com/400/400/portrait,woman?lock=33" alt="Maria Chen"></div><h3>Maria Chen</h3><span>Skin &amp; Facial Expert &middot; 18%</span></div>
+    <div class="stylist"><div class="portrait"><img src="https://loremflickr.com/400/400/portrait,woman?lock=34" alt="Laraib Ali"></div><h3>Laraib Ali</h3><span>Nail Artist &middot; 10%</span></div>
+  </div>
+</section>
+
+<!-- ============ BLOG ============ -->
+<section class="wrap sec editable">
+  <span class="pencil">✎</span>
+  <div class="sec-title"><h2>Latest from Our Blog</h2><p>Tips, trends and transformations.</p></div>
+  <div class="blog-grid">
+    <div class="post"><div class="thumb"><img src="https://loremflickr.com/600/400/haircolor?lock=41" alt=""></div><div class="body"><h3>5 Hair Colour Trends for 2026</h3><p class="ph">Discover the season's most requested shades and techniques.</p></div></div>
+    <div class="post"><div class="thumb"><img src="https://loremflickr.com/600/400/scalpmassage?lock=42" alt=""></div><div class="body"><h3>Why a Scalp Massage Belongs in Your Routine</h3><p class="ph">The science-backed benefits of regular scalp care.</p></div></div>
+    <div class="post"><div class="thumb"><img src="https://loremflickr.com/600/400/manicure?lock=43" alt=""></div><div class="body"><h3>At-Home Manicure Maintenance Tips</h3><p class="ph">Keep your gel manicure flawless between visits.</p></div></div>
+  </div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section class="wrap sec editable">
+  <span class="pencil">✎</span>
+  <div class="sec-title"><h2>Find Us</h2><p>123 Gold Avenue, Beauty District, Lahore, Pakistan</p></div>
+  <div class="map">123 Gold Avenue, Beauty District, Lahore, Pakistan<br>Location Map</div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="wrap cta editable">
+  <span class="pencil">✎</span>
+  <h2>Ready for a Transformation?</h2>
+  <p class="ph">Book your session today and let our experts pamper you.</p>
+  <span class="phone">0306-1522272</span>
+  <a class="gold-btn" href="#">BOOK YOUR APPOINTMENT</a>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid editable">
+      <span class="pencil">✎</span>
+      <div>
+        <svg class="logo-emblem" viewBox="0 0 300 400" width="200" aria-hidden="true">
+          <rect x="6" y="6" width="288" height="388" rx="26" fill="#0a0a0a"/>
+          <g transform="translate(30,30)">
+            <path d="M120 20 C158 78,196 116,196 162 A76 76 0 1 1 44 162 C44 116,82 78,120 20 Z" fill="#d4af37"/>
+            <path d="M150 70 C168 72,184 92,185 120 C186 142,180 160,169 171 C161 179,143 183,126 183 C114 183,102 180,100 171 C107 168,114 168,111 160 C108 156,103 154,110 150 C104 146,101 142,108 138 C91 134,85 129,92 121 C98 116,107 118,113 114 C108 104,108 90,119 80 C127 73,140 71,150 70 Z" fill="#0c0c0c"/>
+            <g fill="none" stroke="#b8902f" stroke-width="7" stroke-linecap="round">
+              <path d="M186 105 C205 110,212 130,200 150 C194 160,200 172,210 175"/>
+              <path d="M182 120 C200 126,206 146,194 166"/>
+            </g>
+            <g fill="none" stroke="#f0d97a" stroke-width="3" stroke-linecap="round">
+              <path d="M186 105 C205 110,212 130,200 150 C194 160,200 172,210 175"/>
+              <path d="M182 120 C200 126,206 146,194 166"/>
+            </g>
+            <g stroke="#6e5712" stroke-width="1.5">
+              <path d="M196 44 C204 36,214 38,214 30 C206 28,196 34,196 44 Z" fill="#d4af37"/>
+              <path d="M210 50 C220 44,230 48,228 40 C218 38,208 44,210 50 Z" fill="#d4af37"/>
+            </g>
+          </g>
+          <text x="150" y="320" text-anchor="middle" font-family="'Playfair Display',Georgia,serif" font-size="30" font-weight="700" fill="#d4af37">The Lime Beauty</text>
+          <text x="150" y="350" text-anchor="middle" font-family="'Inter',sans-serif" font-size="13" letter-spacing="1.5" fill="#d4af37">Be The Best Version of you</text>
+        </svg>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <a href="#">0306-1522272</a>
+        <a href="#">hello@thelimebeauty.com</a>
+        <a href="#">123 Gold Avenue, Lahore</a>
+      </div>
+      <div>
+        <h3>Follow</h3>
+        <a href="#">WhatsApp</a><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">TikTok</a>
+      </div>
+    </div>
+    <div class="foot-bottom">Designed and Developed by <strong>WGN</strong> — &copy; 2026 The Lime Beauty</div>
+  </div>
+</footer>
+
+<div class="img-tools" id="imgTools">
+  <button onclick="changeImg()">Change</button>
+  <button class="del" onclick="deleteImg()">Delete</button>
+</div>
+<input type="file" id="imgFile" accept="image/*">
+
+<div class="map-tools" id="mapTools">
+  <button onclick="setMap()">Set Map</button>
+  <button class="del" onclick="resetMap()">Reset</button>
+</div>
+
+<script>
+  let imgTarget = null;
+  function editableImages(){ return Array.from(document.querySelectorAll('img, .logo-mark, .logo-emblem')); }
+  function bindImages(){
+    const imgs = editableImages();
+    imgs.forEach(function(el, i){
+      el.dataset.imgIdx = i;
+      el.setAttribute('data-img', '');
+      if(el._imgBound) return;
+      el._imgBound = true;
+      el.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        imgTarget = el;
+        const t = document.getElementById('imgTools');
+        t.style.display = 'flex';
+        t.style.left = Math.min(e.clientX, window.innerWidth - 180) + 'px';
+        t.style.top  = (e.clientY + 12) + 'px';
+      });
+    });
+  }
+  function hideImgTools(){ document.getElementById('imgTools').style.display = 'none'; }
+  function changeImg(){
+    if(!imgTarget) return;
+    const f = document.getElementById('imgFile');
+    f.onchange = function(){
+      const file = this.files[0];
+      if(!file) return;
+      const r = new FileReader();
+      r.onload = function(ev){ setImg(imgTarget, ev.target.result); };
+      r.readAsDataURL(file);
+      this.value = '';
+    };
+    f.click();
+  }
+  function setImg(el, src){
+    if(el.tagName === 'IMG'){ el.src = src; }
+    else {
+      const img = document.createElement('img');
+      img.src = src; img.className = el.className || 'logo-mark'; img.alt = 'logo';
+      el.replaceWith(img); bindImages();
+    }
+    const map = JSON.parse(localStorage.getItem('limeMockImg') || '{}');
+    map[el.dataset.imgIdx] = { type:'src', val:src };
+    localStorage.setItem('limeMockImg', JSON.stringify(map));
+    hideImgTools();
+  }
+  function deleteImg(){
+    if(!imgTarget) return;
+    imgTarget.style.display = 'none';
+    const map = JSON.parse(localStorage.getItem('limeMockImg') || '{}');
+    map[imgTarget.dataset.imgIdx] = { type:'del' };
+    localStorage.setItem('limeMockImg', JSON.stringify(map));
+    hideImgTools();
+  }
+  function applyImgEdits(){
+    const map = JSON.parse(localStorage.getItem('limeMockImg') || '{}');
+    const imgs = editableImages();
+    Object.keys(map).forEach(function(k){
+      const el = imgs[k];
+      if(!el) return;
+      if(map[k].type === 'del') el.style.display = 'none';
+      else if(map[k].type === 'src' && el.tagName === 'IMG') el.src = map[k].val;
+    });
+  }
+
+  /* Map editing (always-on, like images) */
+  const MAP_DEFAULT = '123 Gold Avenue, Beauty District, Lahore, Pakistan<br>Location Map';
+  let mapTarget = null;
+  function editableMaps(){ return Array.from(document.querySelectorAll('.map')); }
+  function bindMaps(){
+    editableMaps().forEach(function(el, i){
+      el.dataset.mapIdx = i;
+      el.setAttribute('data-map', '');
+      if(el._mapBound) return;
+      el._mapBound = true;
+      el.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        mapTarget = el;
+        const t = document.getElementById('mapTools');
+        t.style.display = 'flex';
+        t.style.left = Math.min(e.clientX, window.innerWidth - 180) + 'px';
+        t.style.top  = (e.clientY + 12) + 'px';
+      });
+    });
+  }
+  function hideMapTools(){ document.getElementById('mapTools').style.display = 'none'; }
+  function setMap(){
+    if(!mapTarget) return;
+    const url = prompt('Paste a Google Maps embed URL (e.g. https://www.google.com/maps/embed?pb=...):', mapTarget.dataset.mapUrl || '');
+    if(!url) return;
+    const f = document.createElement('iframe');
+    f.src = url; f.loading = 'lazy'; f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.setAttribute('allowfullscreen','');
+    mapTarget.innerHTML = ''; mapTarget.appendChild(f);
+    mapTarget.dataset.mapUrl = url;
+    const m = JSON.parse(localStorage.getItem('limeMockMap') || '{}');
+    m[mapTarget.dataset.mapIdx] = url;
+    localStorage.setItem('limeMockMap', JSON.stringify(m));
+    hideMapTools();
+  }
+  function resetMap(){
+    if(!mapTarget) return;
+    mapTarget.innerHTML = MAP_DEFAULT;
+    delete mapTarget.dataset.mapUrl;
+    const m = JSON.parse(localStorage.getItem('limeMockMap') || '{}');
+    delete m[mapTarget.dataset.mapIdx];
+    localStorage.setItem('limeMockMap', JSON.stringify(m));
+    hideMapTools();
+  }
+  function applyMapEdits(){
+    const m = JSON.parse(localStorage.getItem('limeMockMap') || '{}');
+    const maps = editableMaps();
+    Object.keys(m).forEach(function(k){
+      const el = maps[k];
+      if(!el) return;
+      const f = document.createElement('iframe');
+      f.src = m[k]; f.loading = 'lazy'; f.referrerPolicy = 'no-referrer-when-downgrade';
+      f.setAttribute('allowfullscreen','');
+      el.innerHTML = ''; el.appendChild(f); el.dataset.mapUrl = m[k];
+    });
+  }
+
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.img-tools') && !e.target.closest('[data-img]')) hideImgTools();
+    if(!e.target.closest('.map-tools') && !e.target.closest('[data-map]')) hideMapTools();
+  });
+  function imgFallback(){
+    document.querySelectorAll('img').forEach(function(im){
+      if(im.dataset.fb) return;
+      im.addEventListener('error', function(){
+        if(im.dataset.fb) return;
+        im.dataset.fb = '1';
+        var t = im.getAttribute('alt') || 'Image';
+        im.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+          "<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'>" +
+          "<rect width='100%' height='100%' fill='#16161a'/>" +
+          "<text x='50%' y='50%' fill='#d4af37' font-family='sans-serif' font-size='30' " +
+          "text-anchor='middle' dominant-baseline='middle'>" + t + "</text></svg>");
+      });
+    });
+  }
+  window.addEventListener('DOMContentLoaded', function(){ bindImages(); applyImgEdits(); bindMaps(); applyMapEdits(); imgFallback(); });
+</script>
+
+</body>
+</html>
